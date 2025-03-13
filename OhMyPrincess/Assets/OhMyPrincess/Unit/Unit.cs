@@ -1,8 +1,16 @@
 using UnityEngine;
 
+public enum UnitType
+{
+    Warrior,
+    Archer
+}
+
 public abstract class Unit : MonoBehaviour
 {
+    //밸런스 조정 끝나면 protected로 변경.
     [Header("Unit Stats")]
+    public UnitType unitType;
     public float health;
     public float attackDamage;
     public float attackSpeed;
@@ -31,6 +39,9 @@ public abstract class Unit : MonoBehaviour
     //우선은 protected로 선언했지만, 스트레스로 인한 외부 사망요인 추가시 public으로 변경해줘야할 것.
     protected virtual void Die()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+
+        //오브젝트 풀링으로 최적화
+        ObjectPoolManager.Instance.ReturnUnitObject(unitType, gameObject);
     }
 }

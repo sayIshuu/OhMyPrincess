@@ -10,6 +10,7 @@ public class Warrior : Unit
     {
         base.Start();
         // 스탯 재설정! 이거 때문에라도 상속 하는듯. 하나하나 어캐 넣어줘
+        unitType = UnitType.Warrior;
         //health = 150;
         //attackDamage = 15;
         //attackSpeed = 1;
