@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class SetRoadTileIndex : MonoBehaviour
+public class SetRoadSlotIndex : MonoBehaviour
 {
-    private RoadTile[] roadTileArr;
+    private RoadSlot[] roadTileArr;
     private void Awake()
     {
-        roadTileArr = GetComponentsInChildren<RoadTile>();
+        roadTileArr = GetComponentsInChildren<RoadSlot>();
         for (int i = 0; i < roadTileArr.Length; i++)
         {
             roadTileArr[i].SetRoadTileIdx(i);

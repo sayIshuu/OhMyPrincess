@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RoadTile : MonoBehaviour, IDropHandler
+public class RoadSlot : MonoBehaviour, IDropHandler
 {
     private RectTransform rectTransform;
     private Image image;
