@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public abstract class Unit : MonoBehaviour
@@ -10,6 +11,10 @@ public abstract class Unit : MonoBehaviour
     public float attackDamage;
     public float attackSpeed;
     public float attackRange;
+    //[Header("Attack")]
+    //public Sprite[] attackSprites;
+
+    //private Image unitImage;
 
     protected virtual void Start()
     {
@@ -19,8 +24,10 @@ public abstract class Unit : MonoBehaviour
         //attackRange = 1;
     }
 
-
-    //public virtual void Attack(Enemy target) { }
+    public virtual void Attack(Enemy target)
+    {
+        //UiAnimationManager.Instance.PlayAnimation(unitImage, attackSprites);
+    }
 
     public virtual void TakeDamage(float damage)
     {
@@ -34,9 +41,6 @@ public abstract class Unit : MonoBehaviour
     //우선은 protected로 선언했지만, 스트레스로 인한 외부 사망요인 추가시 public으로 변경해줘야할 것.
     protected virtual void Die()
     {
-        //Destroy(gameObject);
-
-        //오브젝트 풀링으로 최적화
         ObjectPoolManager.Instance.ReturnUnitObject(unitType, gameObject);
     }
 }
