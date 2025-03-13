@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public abstract class Unit : MonoBehaviour
 {
+    public Animator animator;
     //밸런스 조정 끝나면 protected로 변경.
     [Header("Unit Stats")]
     public UnitType unitType;
@@ -18,15 +19,27 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void Start()
     {
+        animator = GetComponent<Animator>();
         //health = 100;
         //attackDamage = 10;
         //attackSpeed = 1;
         //attackRange = 1;
     }
 
+    protected virtual void Update()
+    {
+        //스페이스바 누르면 공격
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Attack(null);
+        }
+    }
+
     public virtual void Attack(Enemy target)
     {
         //UiAnimationManager.Instance.PlayAnimation(unitImage, attackSprites);
+        //animator.SetTrigger("doAttack");
+        animator.SetTrigger("doHit");
     }
 
     public virtual void TakeDamage(float damage)
