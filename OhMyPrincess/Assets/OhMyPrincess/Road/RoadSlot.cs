@@ -26,7 +26,7 @@ public class RoadSlot : MonoBehaviour, IDropHandler
             if (unit != null)
             {
                 eventData.pointerDrag.transform.position = rectTransform.position;
-                eventData.pointerDrag.transform.SetParent(transform.parent);
+                eventData.pointerDrag.transform.SetParent(transform);
             }
         }
     }

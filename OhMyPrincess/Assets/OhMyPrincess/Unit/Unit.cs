@@ -1,10 +1,5 @@
 using UnityEngine;
 
-public enum UnitType
-{
-    Warrior,
-    Archer
-}
 
 public abstract class Unit : MonoBehaviour
 {
