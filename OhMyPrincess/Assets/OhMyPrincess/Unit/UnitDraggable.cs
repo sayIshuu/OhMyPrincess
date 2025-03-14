@@ -6,6 +6,7 @@ public class UnitDraggable : MonoBehaviour
     //private Transform previousParent;
     private bool unBuied = true;
     private Vector3 originalPosition;
+    private RoadSlot originalRoadSlot; // 기존 RoadSlot을 직접 저장
     private Camera mainCamera;
     private bool isDragging = false;
     private UnitType unitType;
@@ -24,12 +25,10 @@ public class UnitDraggable : MonoBehaviour
     private void OnMouseDown()
     {
         isDragging = true;
-        //previousParent = transform.parent; // 드래그 전 부모 오브젝트 저장
-        // 마우스 클릭 위치와 오브젝트 위치의 차이를 저장
         offset = transform.position - GetMouseWorldPosition();
+        Debug.Log("OnMouseDown() 호출됨: " + gameObject.name);
 
-        // 드래그 시작 시 가장 위로 올리기
-        transform.SetParent(null);
+        //transform.SetParent(null);
     }
 
     private void OnMouseDrag()
@@ -45,17 +44,26 @@ public class UnitDraggable : MonoBehaviour
         isDragging = false;
 
         RoadSlot roadSlot = GetRoadSlotAtMousePosition();
-        Debug.Log(roadSlot);
-        if (roadSlot != null)
+
+        if (roadSlot != null && !roadSlot.occupied)
         {
+            if (originalRoadSlot != null)
+            {
+                originalRoadSlot.occupied = false;
+                originalRoadSlot.boxCollider2D.enabled = true;
+            }
+
+            roadSlot.occupied = true;
             transform.position = roadSlot.transform.position + new Vector3(30,-50,0); // RoadSlot 위치로 이동
-            if(unBuied)
+            roadSlot.boxCollider2D.enabled = false;
+            if (unBuied)
             {
                 GameObject unit = ObjectPoolManager.Instance.GetUnitObject(unitType);
                 unit.transform.position = originalPosition;
+                unBuied = false;
             }
+            originalRoadSlot = roadSlot;
             originalPosition = transform.position;
-            unBuied = false;
         }
         else
         {
@@ -67,9 +75,6 @@ public class UnitDraggable : MonoBehaviour
     {
         Vector2 mousePosition = GetMouseWorldPosition(); // offset 제거
 
-        // Debug: Ray를 그려서 제대로 쏘는지 확인
-        Debug.DrawRay(mousePosition, Vector2.zero, Color.red, 2f);
-
         // 여러 개의 충돌체를 감지하기 위해 RaycastAll 사용
         RaycastHit2D[] hits = Physics2D.RaycastAll(mousePosition, Vector2.zero);
         foreach (RaycastHit2D hit in hits)
@@ -79,7 +84,6 @@ public class UnitDraggable : MonoBehaviour
                 return hit.collider.GetComponent<RoadSlot>();
             }
         }
-
         return null;
     }
 
