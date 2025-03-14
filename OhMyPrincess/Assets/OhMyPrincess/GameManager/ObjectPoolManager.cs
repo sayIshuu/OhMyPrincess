@@ -16,11 +16,15 @@ public class ObjectPoolManager : MonoBehaviour
     public GameObject zombieType01Object;
     private int enemyPoolSize = 30;
 
+    [Header("Skill Prefabs")]
+    public GameObject fireBallObject;
+    private int skillPoolSize = 10;
 
     // 큐를 사용하는게 직관적인듯.
     private Queue<GameObject> warriorPool = new Queue<GameObject>();
     private Queue<GameObject> archerPool = new Queue<GameObject>();
     private Queue<GameObject> zombieType01Pool = new Queue<GameObject>();
+    private Queue<GameObject> fireBallPool = new Queue<GameObject>();
 
     //싱글톤
     private void Awake()
@@ -54,6 +58,13 @@ public class ObjectPoolManager : MonoBehaviour
             GameObject zombieType01 = Instantiate(zombieType01Object);
             zombieType01.SetActive(false);
             zombieType01Pool.Enqueue(zombieType01);
+        }
+
+        for (int i = 0; i < skillPoolSize; i++)
+        {
+            GameObject fireBall = Instantiate(fireBallObject);
+            fireBall.SetActive(false);
+            fireBallPool.Enqueue(fireBall);
         }
     }
 
@@ -94,7 +105,6 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-
     public GameObject GetEnemyObject(EnemyType enemyType)
     {
         if (enemyType == EnemyType.ZombieType01)
@@ -117,6 +127,27 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
+    public GameObject GetSkillObject(SkillType skillType)
+    {
+        if (skillType == SkillType.FireBall)
+        {
+            if (fireBallPool.Count > 0)
+            {
+                GameObject fireBall = fireBallPool.Dequeue();
+                fireBall.SetActive(true);
+                return fireBall;
+            }
+            else
+            {
+                GameObject fireBall = Instantiate(fireBallObject);
+                return fireBall;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     //풀로 유닛을 반환하는 함수.
     public void ReturnUnitObject(UnitType unitType, GameObject unit)
@@ -132,7 +163,6 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-
     public void ReturnEnemyObject(EnemyType enemyType, GameObject enemy)
     {
         enemy.SetActive(false);
@@ -142,4 +172,12 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
+    public void ReturnSkillObject(SkillType skillType, GameObject skill)
+    {
+        skill.SetActive(false);
+        if (skillType == SkillType.FireBall)
+        {
+            fireBallPool.Enqueue(skill);
+        }
+    }
 }

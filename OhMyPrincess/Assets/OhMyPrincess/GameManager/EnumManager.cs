@@ -20,7 +20,14 @@ public enum TagType
     Unit,
     Enemy,
     RoadSlot,
-    UnitSlot
+    UnitSlot,
+    Skill
+}
+
+public enum SkillType
+{
+    None,
+    FireBall
 }
 
 public enum ScriptName
