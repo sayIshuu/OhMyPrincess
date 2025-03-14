@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 166103142868236249}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 130, y: 130, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -117,10 +117,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitType: 2
-  health: 0
-  attackDamage: 0
-  attackSpeed: 0
-  attackRange: 0
+  health: 100
+  attackDamage: 10
+  attackSpeed: 2
   armor: 0
 --- !u!50 &6777447341981507445
 Rigidbody2D:
@@ -130,14 +129,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166103142868236249}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -148,7 +147,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!61 &1681724181848379627
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -183,7 +182,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.5}
+  m_Offset: {x: -0.2270805, y: 0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -193,7 +192,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.5, y: 1}
+  m_Size: {x: 1.0458391, y: 1}
   m_EdgeRadius: 0
 --- !u!95 &-57735419045590263
 Animator:

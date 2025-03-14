@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
@@ -9,8 +10,10 @@ public abstract class Enemy : MonoBehaviour
     public float health;
     public float attackDamage;
     public float attackSpeed;
-    public float attackRange;
     public float moveSpeed;
+
+    public bool isAttacking = false;
+    public bool isDied = false;
 
     protected virtual void Start()
     {
@@ -18,9 +21,46 @@ public abstract class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    private void OnEnable()
+    {
+        isDied = false;
+        health = 100;
+        animator.SetBool("Dead", false);
+        isAttacking = false;
+    }
+
     private void FixedUpdate()
     {
-        Move();
+        if (!isAttacking)
+        {
+            Move();
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
+        {
+            isAttacking = true;
+            StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
+        {
+            isAttacking = false;
+        }
+    }
+
+    private IEnumerator AttackCoroutine(Unit target)
+    {
+        while (isAttacking)
+        {
+            Attack(target);
+            yield return new WaitForSeconds(2.0f / attackSpeed);
+        }
     }
 
     public virtual void Move()
@@ -30,15 +70,6 @@ public abstract class Enemy : MonoBehaviour
         rb.MovePosition(newPosition);
     }
 
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
-        {
-            //collision.gameObject.GetComponent<Unit>().TakeDamage(attackDamage);
-            Attack(collision.gameObject.GetComponent<Unit>());
-        }
-    }
-
     public virtual void Attack(Unit target)
     {
         target.TakeDamage(attackDamage);
@@ -46,12 +77,27 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        animator.SetTrigger("Hit");
-        health -= damage;
-        if (health <= 0)
+        if(health > 0)
         {
-            Die();
+            animator.SetTrigger("Hit");
+            health -= damage;
         }
+        else
+        {
+            StartCoroutine(DieCoroutine());
+        }
+    }
+
+    private IEnumerator DieCoroutine()
+    {
+        if(isDied)
+        {
+            yield break;
+        }
+        isDied = true;
+        animator.SetBool("Dead", true);
+        yield return new WaitForSeconds(1.0f);
+        Die();
     }
 
     protected virtual void Die()

@@ -2541,7 +2541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1325956935
 Transform:
   m_ObjectHideFlags: 0
@@ -2569,7 +2569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 424c405c3795eda4280dbc70f4ed4e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 2
+  spawnInterval: 10
   zombieType01Prefab: {fileID: 8847583880326453468, guid: b3cb4e2a740c698409d9e9406ef026b3, type: 3}
   spawnArea:
   - {fileID: 1893768424}
@@ -3794,7 +3794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5566038, g: 0.50671947, b: 0.50671947, a: 1}
+  m_Color: {r: 0.24705884, g: 0.19215688, b: 0.08627451, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

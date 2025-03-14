@@ -93,4 +93,13 @@ public class UnitDraggable : MonoBehaviour
         mousePosition.z = -mainCamera.transform.position.z; // 카메라 위치 보정
         return mainCamera.ScreenToWorldPoint(mousePosition);
     }
+
+    public void UnitDied()
+    {
+        if (originalRoadSlot != null)
+        {
+            originalRoadSlot.occupied = false;
+            originalRoadSlot.boxCollider2D.enabled = true;
+        }
+    }
 }
