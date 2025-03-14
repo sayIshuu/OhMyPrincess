@@ -8,6 +8,8 @@ TagManager:
   - RoadSlot
   - Enemy
   - Unit
+  - Skill
+  - SkillDropArea
   layers:
   - Default
   - TransparentFX

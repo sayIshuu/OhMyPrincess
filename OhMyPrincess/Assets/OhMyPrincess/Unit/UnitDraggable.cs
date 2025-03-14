@@ -26,8 +26,6 @@ public class UnitDraggable : MonoBehaviour
     {
         isDragging = true;
         offset = transform.position - GetMouseWorldPosition();
-        Debug.Log("OnMouseDown() »£√‚µ : " + gameObject.name);
-
         //transform.SetParent(null);
     }
 
