@@ -1,42 +1,96 @@
+using System.Collections;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public abstract class Unit : MonoBehaviour
 {
+    protected Animator animator;
+    private UnitDraggable unitDraggable;
     //밸런스 조정 끝나면 protected로 변경.
     [Header("Unit Stats")]
     public UnitType unitType;
     public float health;
     public float attackDamage;
     public float attackSpeed;
-    public float attackRange;
+
+    private bool isAttacking;
+    private bool isDied;
 
     protected virtual void Start()
     {
-        //health = 100;
-        //attackDamage = 10;
-        //attackSpeed = 1;
-        //attackRange = 1;
+        animator = GetComponent<Animator>();
+        isAttacking = false;
+        isDied = false;
+        unitDraggable = GetComponent<UnitDraggable>();
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            isAttacking = true;
+            StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Enemy>()));
+        }
+    }
 
-    //public virtual void Attack(Enemy target) { }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            isAttacking = false;
+        }
+    }
+
+    private IEnumerator AttackCoroutine(Enemy target)
+    {
+        while (isAttacking)
+        {
+            Attack(target);
+            yield return new WaitForSeconds(2.0f / attackSpeed);
+        }
+    }
+
+    public virtual void Attack(Enemy target)
+    {
+        if(health <= 0)
+        {
+            return;
+        }
+        animator.SetTrigger("doAttack");
+        target.TakeDamage(attackDamage);
+    }
 
     public virtual void TakeDamage(float damage)
     {
-        health -= damage;
-        if (health <= 0)
+        if(health > 0)
         {
-            Die();
+            health -= damage;
+            animator.SetTrigger("doHit");
         }
+        else
+        {
+            StartCoroutine(DieCoroutine());
+        }
+    }
+
+    private IEnumerator DieCoroutine()
+    {
+        if (isDied)
+        {
+            yield break;
+        }
+        animator.SetTrigger("doDie");
+        isDied = true;
+        yield return new WaitForSeconds(2.0f);
+        Die();
     }
 
     //우선은 protected로 선언했지만, 스트레스로 인한 외부 사망요인 추가시 public으로 변경해줘야할 것.
     protected virtual void Die()
     {
-        //Destroy(gameObject);
-
-        //오브젝트 풀링으로 최적화
+        unitDraggable.UnitDied();
+        isDied = false;
+        health = 100;
         ObjectPoolManager.Instance.ReturnUnitObject(unitType, gameObject);
     }
 }

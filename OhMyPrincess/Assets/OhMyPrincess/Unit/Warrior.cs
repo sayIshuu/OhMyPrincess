@@ -17,6 +17,11 @@ public class Warrior : Unit
         //attackRange = 1;
     }
 
+    public override void Attack(Enemy target)
+    {
+        base.Attack(target);
+    }
+
     public override void TakeDamage(float damage)
     {
         //방어력만큼 데미지 감소. Mathf 사용해서

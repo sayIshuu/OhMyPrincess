@@ -1,63 +1,105 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class UnitDraggable : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class UnitDraggable : MonoBehaviour
 {
-    private Transform canvas;
-    private CanvasGroup canvasGroup;
-    private UnitDraggable unitDraggable;
-    private RectTransform rectTransform;
-    private Transform previosParent;
+    private Vector3 offset;
+    //private Transform previousParent;
+    private bool unBuied = true;
+    private Vector3 originalPosition;
+    private RoadSlot originalRoadSlot; // 기존 RoadSlot을 직접 저장
+    private Camera mainCamera;
+    private bool isDragging = false;
     private UnitType unitType;
+
+    private void Start()
+    {
+        mainCamera = Camera.main;
+        originalPosition = transform.position; // 드래그 전 부모 오브젝트 저장
+    }
 
     private void Awake()
     {
-        canvas = FindFirstObjectByType<Canvas>().transform;
-        canvasGroup = GetComponent<CanvasGroup>();
-        unitDraggable = GetComponent<UnitDraggable>();
-        rectTransform = GetComponent<RectTransform>();
         unitType = GetComponent<Unit>().unitType;
     }
 
-
-    public void OnBeginDrag(PointerEventData eventData)
+    private void OnMouseDown()
     {
-        previosParent = transform.parent;
+        isDragging = true;
+        offset = transform.position - GetMouseWorldPosition();
+        Debug.Log("OnMouseDown() 호출됨: " + gameObject.name);
 
-        transform.SetParent(canvas);
-        transform.SetAsLastSibling();
-
-        canvasGroup.blocksRaycasts = false;
+        //transform.SetParent(null);
     }
 
-    public void OnDrag(PointerEventData eventData)
+    private void OnMouseDrag()
     {
-        rectTransform.position = eventData.position;
-    }
-
-    // RoadSlot의 OnDrop에서 유닛을 배치하면, 유닛의 부모를 RoadSlot으로 변경될거임. 이후 실행되는 OnEndDrag
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        canvasGroup.blocksRaycasts = true;
-
-        //1이상인 이유는 자기도 들어갔다가 체크하는것이기 때문.
-        if( !transform.parent.CompareTag(nameof(TagType.RoadSlot)) || transform.parent.childCount > 1)
+        if (isDragging)
         {
-            transform.SetParent(previosParent);
-            rectTransform.position = previosParent.GetComponent<RectTransform>().position;
+            transform.position = GetMouseWorldPosition() + offset;
+        }
+
+    }
+    private void OnMouseUp()
+    {
+        isDragging = false;
+
+        RoadSlot roadSlot = GetRoadSlotAtMousePosition();
+
+        if (roadSlot != null && !roadSlot.occupied)
+        {
+            if (originalRoadSlot != null)
+            {
+                originalRoadSlot.occupied = false;
+                originalRoadSlot.boxCollider2D.enabled = true;
+            }
+
+            roadSlot.occupied = true;
+            transform.position = roadSlot.transform.position + new Vector3(30,-50,0); // RoadSlot 위치로 이동
+            roadSlot.boxCollider2D.enabled = false;
+            if (unBuied)
+            {
+                GameObject unit = ObjectPoolManager.Instance.GetUnitObject(unitType);
+                unit.transform.position = originalPosition;
+                unBuied = false;
+            }
+            originalRoadSlot = roadSlot;
+            originalPosition = transform.position;
         }
         else
         {
-            rectTransform.position = transform.parent.GetComponent<RectTransform>().position;
+            transform.position = originalPosition; // 원래 위치로 복귀
+        }
+    }
 
-            //구입 드래그이면 드래그로 배치된 후, 구입창에 새로운 유닛을 생성해줘야함.
-            if(previosParent.CompareTag(nameof(TagType.UnitSlot)))
+    private RoadSlot GetRoadSlotAtMousePosition()
+    {
+        Vector2 mousePosition = GetMouseWorldPosition(); // offset 제거
+
+        // 여러 개의 충돌체를 감지하기 위해 RaycastAll 사용
+        RaycastHit2D[] hits = Physics2D.RaycastAll(mousePosition, Vector2.zero);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.collider.CompareTag(nameof(TagType.RoadSlot)))
             {
-                GameObject unit = ObjectPoolManager.Instance.GetUnitObject(unitType);
-                unit.transform.SetParent(previosParent);
-                unit.transform.GetComponent<RectTransform>().position = previosParent.GetComponent<RectTransform>().position;
+                return hit.collider.GetComponent<RoadSlot>();
             }
         }
+        return null;
+    }
 
+    private Vector3 GetMouseWorldPosition()
+    {
+        Vector3 mousePosition = Input.mousePosition;
+        mousePosition.z = -mainCamera.transform.position.z; // 카메라 위치 보정
+        return mainCamera.ScreenToWorldPoint(mousePosition);
+    }
+
+    public void UnitDied()
+    {
+        if (originalRoadSlot != null)
+        {
+            originalRoadSlot.occupied = false;
+            originalRoadSlot.boxCollider2D.enabled = true;
+        }
     }
 }
