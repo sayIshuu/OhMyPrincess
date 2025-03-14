@@ -11,6 +11,7 @@ public abstract class Enemy : MonoBehaviour
     public float attackDamage;
     public float attackSpeed;
     public float moveSpeed;
+    public int reward;
 
     public bool isMoving = true;
     public bool isAttacking = false;
@@ -90,6 +91,7 @@ public abstract class Enemy : MonoBehaviour
         }
         isDied = true;
         animator.SetBool("Dead", true);
+        GoldManager.Instance.AddGold(reward);
         yield return new WaitForSeconds(1.0f);
         Die();
     }

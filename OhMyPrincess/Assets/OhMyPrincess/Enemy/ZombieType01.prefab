@@ -108,7 +108,10 @@ MonoBehaviour:
   attackDamage: 1
   attackSpeed: 1
   moveSpeed: 100
+  reward: 5
+  isMoving: 1
   isAttacking: 0
+  isDied: 0
 --- !u!95 &6280613606733163637
 Animator:
   serializedVersion: 7
