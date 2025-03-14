@@ -12,6 +12,9 @@ public abstract class Unit : MonoBehaviour
     public float health;
     public float attackDamage;
     public float attackSpeed;
+    public float stress;
+
+    public int cost;
 
     private bool isAttacking;
     private bool isDied;

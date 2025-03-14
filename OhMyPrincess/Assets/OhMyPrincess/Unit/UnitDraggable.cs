@@ -45,6 +45,13 @@ public class UnitDraggable : MonoBehaviour
 
         if (roadSlot != null && !roadSlot.occupied)
         {
+            //리팩토링 필요. 일단 기능구현부터
+            if(unBuied && !GoldManager.Instance.checkGold(GetComponent<Unit>().cost))
+            {
+                transform.position = originalPosition;
+                return;
+            }
+
             if (originalRoadSlot != null)
             {
                 originalRoadSlot.occupied = false;
@@ -54,10 +61,14 @@ public class UnitDraggable : MonoBehaviour
             roadSlot.occupied = true;
             transform.position = roadSlot.transform.position + new Vector3(30,-50,0); // RoadSlot 위치로 이동
             roadSlot.boxCollider2D.enabled = false;
+
+            //구입하는 드래그인 경우
             if (unBuied)
             {
                 GameObject unit = ObjectPoolManager.Instance.GetUnitObject(unitType);
                 unit.transform.position = originalPosition;
+
+                GoldManager.Instance.SpendGold(unit.GetComponent<Unit>().cost);
                 unBuied = false;
             }
             originalRoadSlot = roadSlot;

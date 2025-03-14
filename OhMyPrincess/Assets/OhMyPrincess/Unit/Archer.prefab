@@ -108,6 +108,7 @@ MonoBehaviour:
   health: 100
   attackDamage: 50
   attackSpeed: 4
+  cost: 200
 --- !u!114 &-759977299215170387
 MonoBehaviour:
   m_ObjectHideFlags: 0
