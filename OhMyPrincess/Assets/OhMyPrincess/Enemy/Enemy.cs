@@ -12,6 +12,7 @@ public abstract class Enemy : MonoBehaviour
     public float attackSpeed;
     public float moveSpeed;
 
+    public bool isMoving = true;
     public bool isAttacking = false;
     public bool isDied = false;
 
@@ -23,7 +24,7 @@ public abstract class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isAttacking)
+        if (!isAttacking && isMoving)
         {
             Move();
         }
@@ -69,10 +70,10 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        if(health > 0)
+        health -= damage;
+        if (health > 0)
         {
             animator.SetTrigger("Hit");
-            health -= damage;
         }
         else
         {
@@ -82,7 +83,8 @@ public abstract class Enemy : MonoBehaviour
 
     private IEnumerator DieCoroutine()
     {
-        if(isDied)
+        isMoving = false;
+        if (isDied)
         {
             yield break;
         }
@@ -97,6 +99,7 @@ public abstract class Enemy : MonoBehaviour
         animator.SetBool("Dead", false);
         isDied = false;
         health = 100;
+        isMoving = true;
         ObjectPoolManager.Instance.ReturnEnemyObject(enemyType, gameObject);
     }
 }
