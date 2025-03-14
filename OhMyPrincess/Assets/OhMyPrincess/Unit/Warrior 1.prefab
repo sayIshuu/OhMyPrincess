@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitType: 2
-  health: 100
+  health: 2
   attackDamage: 10
   attackSpeed: 2
   armor: 0

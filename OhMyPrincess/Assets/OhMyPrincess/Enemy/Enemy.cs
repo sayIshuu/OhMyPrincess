@@ -21,14 +21,6 @@ public abstract class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void OnEnable()
-    {
-        isDied = false;
-        health = 100;
-        animator.SetBool("Dead", false);
-        isAttacking = false;
-    }
-
     private void FixedUpdate()
     {
         if (!isAttacking)
@@ -102,6 +94,9 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        animator.SetBool("Dead", false);
+        isDied = false;
+        health = 100;
         ObjectPoolManager.Instance.ReturnEnemyObject(enemyType, gameObject);
     }
 }

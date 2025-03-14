@@ -12,12 +12,15 @@ public abstract class Unit : MonoBehaviour
     public float health;
     public float attackDamage;
     public float attackSpeed;
+
     private bool isAttacking;
+    private bool isDied;
 
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
         isAttacking = false;
+        isDied = false;
         unitDraggable = GetComponent<UnitDraggable>();
     }
 
@@ -42,7 +45,6 @@ public abstract class Unit : MonoBehaviour
     {
         while (isAttacking)
         {
-            animator.SetTrigger("doAttack");
             Attack(target);
             yield return new WaitForSeconds(2.0f / attackSpeed);
         }
@@ -50,23 +52,35 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void Attack(Enemy target)
     {
+        if(health <= 0)
+        {
+            return;
+        }
         animator.SetTrigger("doAttack");
         target.TakeDamage(attackDamage);
     }
 
     public virtual void TakeDamage(float damage)
     {
-        health -= damage;
-        animator.SetTrigger("doHit");
-        if (health <= 0)
+        if(health > 0)
         {
-            DieCoroutine();
+            health -= damage;
+            animator.SetTrigger("doHit");
+        }
+        else
+        {
+            StartCoroutine(DieCoroutine());
         }
     }
 
     private IEnumerator DieCoroutine()
     {
+        if (isDied)
+        {
+            yield break;
+        }
         animator.SetTrigger("doDie");
+        isDied = true;
         yield return new WaitForSeconds(2.0f);
         Die();
     }
@@ -75,6 +89,8 @@ public abstract class Unit : MonoBehaviour
     protected virtual void Die()
     {
         unitDraggable.UnitDied();
+        isDied = false;
+        health = 100;
         ObjectPoolManager.Instance.ReturnUnitObject(unitType, gameObject);
     }
 }
