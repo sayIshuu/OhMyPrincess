@@ -7,6 +7,13 @@ public enum UnitType
     Warrior
 }
 
+public enum EnemyType
+{
+    None,
+    ZombieType01,
+    ZombieType02
+}
+
 public enum TagType
 {
     None,

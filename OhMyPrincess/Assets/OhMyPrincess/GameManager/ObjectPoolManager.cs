@@ -12,10 +12,15 @@ public class ObjectPoolManager : MonoBehaviour
     public GameObject archerObject;
     private int unitPoolSize = 30;
 
+    [Header("Enemy Prefabs")]
+    public GameObject zombieType01Object;
+    private int enemyPoolSize = 30;
+
 
     // 큐를 사용하는게 직관적인듯.
     private Queue<GameObject> warriorPool = new Queue<GameObject>();
     private Queue<GameObject> archerPool = new Queue<GameObject>();
+    private Queue<GameObject> zombieType01Pool = new Queue<GameObject>();
 
     //싱글톤
     private void Awake()
@@ -42,6 +47,13 @@ public class ObjectPoolManager : MonoBehaviour
             GameObject archer = Instantiate(archerObject);
             archer.SetActive(false);
             archerPool.Enqueue(archer);
+        }
+
+        for (int i = 0; i < enemyPoolSize; i++)
+        {
+            GameObject zombieType01 = Instantiate(zombieType01Object);
+            zombieType01.SetActive(false);
+            zombieType01Pool.Enqueue(zombieType01);
         }
     }
 
@@ -82,6 +94,30 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
+
+    public GameObject GetEnemyObject(EnemyType enemyType)
+    {
+        if (enemyType == EnemyType.ZombieType01)
+        {
+            if (zombieType01Pool.Count > 0)
+            {
+                GameObject zombieType01 = zombieType01Pool.Dequeue();
+                zombieType01.SetActive(true);
+                return zombieType01;
+            }
+            else
+            {
+                GameObject zombieType01 = Instantiate(zombieType01Object);
+                return zombieType01;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
     //풀로 유닛을 반환하는 함수.
     public void ReturnUnitObject(UnitType unitType, GameObject unit)
     {
@@ -94,15 +130,16 @@ public class ObjectPoolManager : MonoBehaviour
         {
             archerPool.Enqueue(unit);
         }
-        /* 이게 사실 더 안전한 방법이지만,,, 흠 모르겠다. => enum으로 해결.
-        if (unit.GetComponent<Unit>().unitType == "warrior")
-        {
-            warriorPool.Enqueue(unit);
-        }
-        else if (unit.GetComponent<Unit>().unitType == "archer")
-        {
-            archerPool.Enqueue(unit);
-        }
-        */
     }
+
+
+    public void ReturnEnemyObject(EnemyType enemyType, GameObject enemy)
+    {
+        enemy.SetActive(false);
+        if (enemyType == EnemyType.ZombieType01)
+        {
+            zombieType01Pool.Enqueue(enemy);
+        }
+    }
+
 }
