@@ -6,13 +6,13 @@ public abstract class Unit : MonoBehaviour
 {
     protected Animator animator;
     private UnitDraggable unitDraggable;
+    private UnitStress unitStress;
     //밸런스 조정 끝나면 protected로 변경.
     [Header("Unit Stats")]
     public UnitType unitType;
     public float health;
     public float attackDamage;
     public float attackSpeed;
-    public float stress;
 
     public int cost;
 
@@ -25,6 +25,7 @@ public abstract class Unit : MonoBehaviour
         isAttacking = false;
         isDied = false;
         unitDraggable = GetComponent<UnitDraggable>();
+        unitStress = GetComponent<UnitStress>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -58,6 +59,10 @@ public abstract class Unit : MonoBehaviour
         if(health <= 0)
         {
             return;
+        }
+        if(Probability.ProbabilityCheck(50))
+        {
+            unitStress.IncreaseStress(10);
         }
         animator.SetTrigger("doAttack");
         target.TakeDamage(attackDamage);
