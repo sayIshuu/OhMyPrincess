@@ -7,16 +7,20 @@ public abstract class Unit : MonoBehaviour
     protected Animator animator;
     private UnitDraggable unitDraggable;
     private UnitStress unitStress;
+    private Rigidbody2D rb;
     //밸런스 조정 끝나면 protected로 변경.
     [Header("Unit Stats")]
     public UnitType unitType;
     public float health;
     public float attackDamage;
     public float attackSpeed;
+    public float moveSpeed;
+
+    public bool isCollapsed;
 
     public int cost;
 
-    private bool isAttacking;
+    public bool isAttacking;
     private bool isDied;
 
     protected virtual void Start()
@@ -24,22 +28,47 @@ public abstract class Unit : MonoBehaviour
         animator = GetComponent<Animator>();
         isAttacking = false;
         isDied = false;
+        isCollapsed = false;
         unitDraggable = GetComponent<UnitDraggable>();
         unitStress = GetComponent<UnitStress>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isAttacking && isCollapsed)
+        {
+            Move();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if(!isAttacking)
         {
-            isAttacking = true;
-            StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Enemy>()));
+            if (isCollapsed)
+            {
+                if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
+                {
+                    Debug.Log("상대 유닛 충돌");
+                    isAttacking = true;
+                    StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
+                }
+            }
+            else
+            {
+                if (collision.gameObject.CompareTag("Enemy"))
+                {
+                    isAttacking = true;
+                    StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Enemy>()));
+                }
+            }
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag(nameof(TagType.Unit)) || collision.gameObject.CompareTag("Enemy"))
         {
             isAttacking = false;
         }
@@ -54,16 +83,35 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    private IEnumerator AttackCoroutine(Unit target)
+    {
+        while (isAttacking)
+        {
+            Debug.Log("공격코루틴실행");
+            Attack(target);
+            yield return new WaitForSeconds(2.0f / attackSpeed);
+        }
+        isAttacking = false;
+    }
+
     public virtual void Attack(Enemy target)
     {
         if(health <= 0)
         {
             return;
         }
-        if(Probability.ProbabilityCheck(50))
+        animator.SetTrigger("doAttack");
+        target.TakeDamage(attackDamage);
+    }
+
+    public virtual void Attack(Unit target)
+    {
+        Debug.Log("공격실행");
+        if (health <= 0)
         {
-            unitStress.IncreaseStress(10);
+            return;
         }
+        
         animator.SetTrigger("doAttack");
         target.TakeDamage(attackDamage);
     }
@@ -74,10 +122,23 @@ public abstract class Unit : MonoBehaviour
         {
             health -= damage;
             animator.SetTrigger("doHit");
+            if (Probability.ProbabilityCheck(50))
+            {
+                unitStress.IncreaseStress(25);
+            }
         }
         else
         {
             StartCoroutine(DieCoroutine());
+        }
+    }
+
+    public virtual void Move()
+    {
+        if (isCollapsed)
+        {
+            Vector2 newPosition = rb.position + Vector2.left * moveSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(newPosition);
         }
     }
 

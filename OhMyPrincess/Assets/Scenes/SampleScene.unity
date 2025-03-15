@@ -1365,7 +1365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6777447341981507445, guid: 8f48b9af9f774744b8dd0c412b0f99fb, type: 3}
       propertyPath: m_BodyType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1939,7 +1939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 1000
-  goldText: {fileID: 0}
+  goldText: {fileID: 488089456}
 --- !u!4 &768852620 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9198353751623334201, guid: 2d6fb7be3b3882743b25031fe7042919, type: 3}
@@ -3393,7 +3393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 424c405c3795eda4280dbc70f4ed4e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 2
+  spawnInterval: 10
   zombieType01Prefab: {fileID: 8847583880326453468, guid: b3cb4e2a740c698409d9e9406ef026b3, type: 3}
   spawnArea:
   - {fileID: 1893768424}
@@ -5603,7 +5603,6 @@ GameObject:
   - component: {fileID: 2126318154}
   - component: {fileID: 2126318156}
   - component: {fileID: 2126318155}
-  - component: {fileID: 2126318157}
   m_Layer: 5
   m_Name: GoldPanel
   m_TagString: Untagged
@@ -5670,20 +5669,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2126318153}
   m_CullTransparentMesh: 1
---- !u!114 &2126318157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2126318153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4b67cc69a81dc74ea31ef9ad581a20d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gold: 1000
-  goldText: {fileID: 488089456}
 --- !u!1001 &5345206049963851938
 PrefabInstance:
   m_ObjectHideFlags: 0
