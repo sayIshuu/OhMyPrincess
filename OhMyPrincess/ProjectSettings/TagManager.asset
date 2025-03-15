@@ -10,6 +10,7 @@ TagManager:
   - Unit
   - Skill
   - SkillDropArea
+  - Betrator
   layers:
   - Default
   - TransparentFX

@@ -39,16 +39,19 @@ public class UnitStress : MonoBehaviour
         UpdateUnitColorByStress();
     }
 
+    
     private void Collapse()
     {
         unit.isCollapsed = true;
-        unit.gameObject.tag = nameof(TagType.Enemy);
+        unit.gameObject.tag = nameof(TagType.Betrator);
         spriteRenderer.flipX = true;
+        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
         unit.isAttacking = false;
         unit.gameObject.layer = LayerMask.NameToLayer("enemy");
-
+        unit.attackSpeed = 2.5f;
         //X position freeze 해제하기
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         StopAllCoroutines();
     }
+    
 }

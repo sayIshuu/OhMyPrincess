@@ -44,33 +44,39 @@ public abstract class Unit : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(!isAttacking)
+        if (isCollapsed)
         {
-            if (isCollapsed)
+            if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
             {
-                if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
-                {
-                    Debug.Log("상대 유닛 충돌");
-                    isAttacking = true;
-                    StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
-                }
+                isAttacking = true;
+                rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
             }
-            else
+        }
+        else
+        {
+            if (collision.gameObject.CompareTag("Enemy"))
             {
-                if (collision.gameObject.CompareTag("Enemy"))
-                {
-                    isAttacking = true;
-                    StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Enemy>()));
-                }
+                isAttacking = true;
+                StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Enemy>()));
+            }
+            else if(collision.gameObject.CompareTag(nameof(TagType.Betrator)))
+            {
+                isAttacking = true;
+                StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
             }
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag(nameof(TagType.Unit)) || collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag(nameof(TagType.Unit)) || collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag(nameof(TagType.Betrator)))
         {
             isAttacking = false;
+            if(isCollapsed)
+            {
+                rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+            }
         }
     }
 
@@ -87,7 +93,6 @@ public abstract class Unit : MonoBehaviour
     {
         while (isAttacking)
         {
-            Debug.Log("공격코루틴실행");
             Attack(target);
             yield return new WaitForSeconds(2.0f / attackSpeed);
         }
@@ -106,7 +111,6 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void Attack(Unit target)
     {
-        Debug.Log("공격실행");
         if (health <= 0)
         {
             return;
