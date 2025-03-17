@@ -118,12 +118,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitType: 2
-  health: 50
-  attackDamage: 10
-  attackSpeed: 2
+  health: 200
+  attackDamage: 15
+  attackSpeed: 2.1
   moveSpeed: 150
   isCollapsed: 0
-  cost: 100
+  cost: 200
+  energy: 10
   isAttacking: 0
   armor: 0
 --- !u!114 &-7859302698450882361
@@ -139,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stress: 0
+  isHealing: 0
 --- !u!50 &6777447341981507445
 Rigidbody2D:
   serializedVersion: 5

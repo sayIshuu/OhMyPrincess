@@ -23,6 +23,12 @@ public abstract class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    private void OnEnable()
+    {
+        health += PrincessManager.Instance.princessStress / 10;
+        attackDamage += PrincessManager.Instance.princessStress / 50;
+    }
+
     private void FixedUpdate()
     {
         if (!isAttacking && isMoving)
@@ -35,6 +41,10 @@ public abstract class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
         {
+            if(collision.gameObject.GetComponent<Unit>().unitType == UnitType.Batch)
+            {
+                return;
+            }
             isAttacking = true;
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
@@ -82,6 +92,21 @@ public abstract class Enemy : MonoBehaviour
         {
             StartCoroutine(DieCoroutine());
         }
+    }
+
+    public virtual bool TakeDamageBySkill(float damage)
+    {
+        health -= damage;
+        if (health > 0)
+        {
+            animator.SetTrigger("Hit");
+        }
+        else
+        {
+            StartCoroutine(DieCoroutine());
+            return true;
+        }
+        return false;
     }
 
     private IEnumerator DieCoroutine()

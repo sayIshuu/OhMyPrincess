@@ -6,14 +6,23 @@ public class Archer : Unit
     {
         base.Start();
         unitType = UnitType.Archer;
-        //health = 100;
-        //attackDamage = 10;
-        //attackSpeed = 1;
-        //attackRange = 1;
+        animator = GetComponent<Animator>();
     }
 
-    public override void TakeDamage(float damage)
+    protected override void Die()
     {
-        base.TakeDamage(damage);
+        base.Die();
+        health = 100;
+    }
+
+    public override void Burn()
+    {
+        base.Burn();
+        //공주스트레스가 높을수록 확률이 올라감.
+        float percent = 10 + (PrincessManager.Instance.princessStress / 5);
+        if (Probability.ProbabilityCheck(percent))
+        {
+            PrincessManager.Instance.IncreaseStress(35);
+        }
     }
 }

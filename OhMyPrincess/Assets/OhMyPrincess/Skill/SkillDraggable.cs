@@ -26,12 +26,18 @@ public class SkillDraggable : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if(PrincessManager.Instance.princessStress < skill.mentalCost)
+        {
+            return;
+        }
         isDragging = true;
         
         foreach (GameObject area in skillSpawnArea)
         {
             area.SetActive(true);
         }
+
+        PrincessManager.Instance.StartDragSkill();
     }
 
     private void OnMouseDrag()
@@ -51,7 +57,7 @@ public class SkillDraggable : MonoBehaviour
         }
 
         transform.position = originalPosition;
-
+        PrincessManager.Instance.EndDragSkill(skill.mentalCost);
         StartCoroutine(usedSkill());
     }
 

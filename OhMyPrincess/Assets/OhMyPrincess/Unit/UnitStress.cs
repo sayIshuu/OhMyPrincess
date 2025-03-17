@@ -64,7 +64,7 @@ public class UnitStress : MonoBehaviour
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
-            DecreaseStress(10);
+            DecreaseStress(2);
             originalColor = spriteRenderer.color;
             elapsedTime = 0;
             while (elapsedTime < duration)
@@ -83,6 +83,12 @@ public class UnitStress : MonoBehaviour
 
     private void Collapse()
     {
+        float percent = 30 + (PrincessManager.Instance.princessStress / 5);
+        if (Probability.ProbabilityCheck(percent))
+        {
+            PrincessManager.Instance.IncreaseStress(30);
+        }
+
         unit.isCollapsed = true;
         unit.gameObject.tag = nameof(TagType.Betrator);
         spriteRenderer.flipX = true;

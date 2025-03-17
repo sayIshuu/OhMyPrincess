@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public enum RoadSlotType
 {
     Road,
-    Church
+    Church,
+    Heart
 }
 
 public class RoadSlot : MonoBehaviour//, IDropHandler

@@ -24,6 +24,10 @@ public class UnitDraggable : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if(gameObject.tag != nameof(TagType.Unit))
+        {
+            return;
+        }
         isDragging = true;
         offset = transform.position - GetMouseWorldPosition();
         //transform.SetParent(null);
@@ -52,10 +56,34 @@ public class UnitDraggable : MonoBehaviour
                 return;
             }
 
+            if(unitType == UnitType.Batch && roadSlot.roadSlotType != RoadSlotType.Heart)
+            {
+                transform.position = originalPosition;
+                return;
+            }
+
             if (originalRoadSlot != null)
             {
                 originalRoadSlot.occupied = false;
                 originalRoadSlot.boxCollider2D.enabled = true;
+            }
+
+            //구입하는 드래그인 경우
+            if (unBuied)
+            {
+                GameObject unit = ObjectPoolManager.Instance.GetUnitObject(unitType);
+                unit.transform.position = originalPosition;
+
+                GoldManager.Instance.SpendGold(unit.GetComponent<Unit>().cost);
+                unBuied = false;
+            }
+
+            //불꽃에 넣어버리기
+            if (roadSlot.roadSlotType == RoadSlotType.Heart)
+            {
+                unBuied = true;
+                GetComponent<Unit>().Burn();
+                return;
             }
 
             //배치됨
@@ -71,15 +99,7 @@ public class UnitDraggable : MonoBehaviour
                 GetComponent<UnitStress>().isHealing = false;
             }
 
-            //구입하는 드래그인 경우
-            if (unBuied)
-            {
-                GameObject unit = ObjectPoolManager.Instance.GetUnitObject(unitType);
-                unit.transform.position = originalPosition;
-
-                GoldManager.Instance.SpendGold(unit.GetComponent<Unit>().cost);
-                unBuied = false;
-            }
+            
             originalRoadSlot = roadSlot;
             originalPosition = transform.position;
         }
