@@ -6,17 +6,21 @@ public abstract class Unit : MonoBehaviour
 {
     protected Animator animator;
     private UnitDraggable unitDraggable;
+    private UnitStress unitStress;
+    private Rigidbody2D rb;
     //밸런스 조정 끝나면 protected로 변경.
     [Header("Unit Stats")]
     public UnitType unitType;
     public float health;
     public float attackDamage;
     public float attackSpeed;
-    public float stress;
+    public float moveSpeed;
+
+    public bool isCollapsed;
 
     public int cost;
 
-    private bool isAttacking;
+    public bool isAttacking;
     private bool isDied;
 
     protected virtual void Start()
@@ -24,23 +28,55 @@ public abstract class Unit : MonoBehaviour
         animator = GetComponent<Animator>();
         isAttacking = false;
         isDied = false;
+        isCollapsed = false;
         unitDraggable = GetComponent<UnitDraggable>();
+        unitStress = GetComponent<UnitStress>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isAttacking && isCollapsed)
+        {
+            Move();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (isCollapsed)
         {
-            isAttacking = true;
-            StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Enemy>()));
+            if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
+            {
+                isAttacking = true;
+                rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
+            }
+        }
+        else
+        {
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                isAttacking = true;
+                StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Enemy>()));
+            }
+            else if(collision.gameObject.CompareTag(nameof(TagType.Betrator)))
+            {
+                isAttacking = true;
+                StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
+            }
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag(nameof(TagType.Unit)) || collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag(nameof(TagType.Betrator)))
         {
             isAttacking = false;
+            if(isCollapsed)
+            {
+                rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+            }
         }
     }
 
@@ -53,6 +89,16 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
+    private IEnumerator AttackCoroutine(Unit target)
+    {
+        while (isAttacking)
+        {
+            Attack(target);
+            yield return new WaitForSeconds(2.0f / attackSpeed);
+        }
+        isAttacking = false;
+    }
+
     public virtual void Attack(Enemy target)
     {
         if(health <= 0)
@@ -63,16 +109,40 @@ public abstract class Unit : MonoBehaviour
         target.TakeDamage(attackDamage);
     }
 
+    public virtual void Attack(Unit target)
+    {
+        if (health <= 0)
+        {
+            return;
+        }
+        
+        animator.SetTrigger("doAttack");
+        target.TakeDamage(attackDamage);
+    }
+
     public virtual void TakeDamage(float damage)
     {
         if(health > 0)
         {
             health -= damage;
             animator.SetTrigger("doHit");
+            if (Probability.ProbabilityCheck(50))
+            {
+                unitStress.IncreaseStress(25);
+            }
         }
         else
         {
             StartCoroutine(DieCoroutine());
+        }
+    }
+
+    public virtual void Move()
+    {
+        if (isCollapsed)
+        {
+            Vector2 newPosition = rb.position + Vector2.left * moveSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(newPosition);
         }
     }
 

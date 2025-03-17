@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5871413254134564022}
   - component: {fileID: 5977271380027348889}
   - component: {fileID: 4524966134314059874}
+  - component: {fileID: -7859302698450882361}
   - component: {fileID: 6777447341981507445}
   - component: {fileID: 1681724181848379627}
   - component: {fileID: -57735419045590263}
@@ -117,11 +118,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitType: 2
-  health: 2
+  health: 50
   attackDamage: 10
   attackSpeed: 2
+  moveSpeed: 150
+  isCollapsed: 0
   cost: 100
+  isAttacking: 0
   armor: 0
+--- !u!114 &-7859302698450882361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166103142868236249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3309496c8e1b13d4e8e0cdb8e31221f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stress: 0
 --- !u!50 &6777447341981507445
 Rigidbody2D:
   serializedVersion: 5

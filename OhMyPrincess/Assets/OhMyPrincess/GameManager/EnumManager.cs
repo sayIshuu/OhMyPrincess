@@ -21,7 +21,8 @@ public enum TagType
     Enemy,
     RoadSlot,
     UnitSlot,
-    Skill
+    Skill,
+    Betrator
 }
 
 public enum SkillType

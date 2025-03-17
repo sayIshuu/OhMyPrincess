@@ -8,6 +8,7 @@ public class SetRoadSlotIndex : MonoBehaviour
         roadTileArr = GetComponentsInChildren<RoadSlot>();
         for (int i = 0; i < roadTileArr.Length; i++)
         {
+            //0~26
             roadTileArr[i].SetRoadTileIdx(i);
         }
     }

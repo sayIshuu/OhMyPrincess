@@ -36,15 +36,17 @@ public abstract class Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
         {
             isAttacking = true;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag(nameof(TagType.Unit)))
+        if (collision.gameObject.CompareTag(nameof(TagType.Unit)) || collision.gameObject.CompareTag(nameof(TagType.Betrator)))
         {
             isAttacking = false;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         }
     }
 
