@@ -45,7 +45,6 @@ public class SkillDraggable : MonoBehaviour
     private void OnMouseUp()
     {
         isDragging = false;
-        Debug.Log(currentDropArea);
         if (currentDropArea != null)
         {
             currentDropArea.SkillDrop(skill);

@@ -3,12 +3,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+public enum RoadSlotType
+{
+    Road,
+    Church
+}
+
 public class RoadSlot : MonoBehaviour//, IDropHandler
 {
     public bool occupied = false;
     private int index;
-    //자신의 콜라이더 가져오기
     public BoxCollider2D boxCollider2D;
+    public RoadSlotType roadSlotType;
 
     private void Start()
     {

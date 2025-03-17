@@ -58,9 +58,18 @@ public class UnitDraggable : MonoBehaviour
                 originalRoadSlot.boxCollider2D.enabled = true;
             }
 
+            //배치됨
             roadSlot.occupied = true;
             transform.position = roadSlot.transform.position + new Vector3(30,-50,0); // RoadSlot 위치로 이동
             roadSlot.boxCollider2D.enabled = false;
+            if(roadSlot.roadSlotType == RoadSlotType.Church)
+            {
+                GetComponent<UnitStress>().StartHeal();
+            }
+            else
+            {
+                GetComponent<UnitStress>().isHealing = false;
+            }
 
             //구입하는 드래그인 경우
             if (unBuied)
