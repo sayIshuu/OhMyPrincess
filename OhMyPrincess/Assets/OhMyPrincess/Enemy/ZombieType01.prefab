@@ -105,10 +105,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   health: 100
-  attackDamage: 5
+  attackDamage: 10
   attackSpeed: 1
   moveSpeed: 100
-  reward: 20
+  reward: 10
   isMoving: 1
   isAttacking: 0
   isDied: 0

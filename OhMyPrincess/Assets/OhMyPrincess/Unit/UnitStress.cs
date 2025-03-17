@@ -64,7 +64,7 @@ public class UnitStress : MonoBehaviour
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
-            DecreaseStress(10);
+            DecreaseStress(2);
             originalColor = spriteRenderer.color;
             elapsedTime = 0;
             while (elapsedTime < duration)
