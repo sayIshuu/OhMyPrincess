@@ -12,10 +12,6 @@ public class Warrior : Unit
         // 스탯 재설정! 이거 때문에라도 상속 하는듯. 하나하나 어캐 넣어줘
         unitType = UnitType.Warrior;
         animator = GetComponent<Animator>();
-        //health = 150;
-        //attackDamage = 15;
-        //attackSpeed = 1;
-        //attackRange = 1;
     }
 
     public override void Attack(Enemy target)
@@ -34,5 +30,15 @@ public class Warrior : Unit
     {
         base.Die();
         health = 100;
+    }
+
+    public override void Burn()
+    {
+        base.Burn();
+        float percent = 10 + (PrincessManager.Instance.princessStress / 5);
+        if (Probability.ProbabilityCheck(percent))
+        {
+            PrincessManager.Instance.IncreaseStress(30);
+        }
     }
 }

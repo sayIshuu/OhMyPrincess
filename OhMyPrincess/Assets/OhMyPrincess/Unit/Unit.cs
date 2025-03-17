@@ -59,11 +59,21 @@ public abstract class Unit : MonoBehaviour
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 isAttacking = true;
+                float percent = 5 + (PrincessManager.Instance.princessStress / 10);
+                if (Probability.ProbabilityCheck(percent))
+                {
+                    unitStress.IncreaseStress(10);
+                }
                 StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Enemy>()));
             }
             else if(collision.gameObject.CompareTag(nameof(TagType.Betrator)))
             {
                 isAttacking = true;
+                float percent = 20 + (PrincessManager.Instance.princessStress / 10);
+                if (Probability.ProbabilityCheck(percent))
+                {
+                    unitStress.IncreaseStress(20);
+                }
                 StartCoroutine(AttackCoroutine(collision.gameObject.GetComponent<Unit>()));
             }
         }
@@ -127,9 +137,12 @@ public abstract class Unit : MonoBehaviour
         {
             health -= damage;
             animator.SetTrigger("doHit");
-            if (Probability.ProbabilityCheck(50))
+
+            //공주스트레스가 높을수록 확률이 올라감.
+            float percent = 15 + (PrincessManager.Instance.princessStress / 10);
+            if (Probability.ProbabilityCheck(percent))
             {
-                unitStress.IncreaseStress(25);
+                unitStress.IncreaseStress(20);
             }
         }
         else
@@ -162,6 +175,11 @@ public abstract class Unit : MonoBehaviour
     //우선은 protected로 선언했지만, 스트레스로 인한 외부 사망요인 추가시 public으로 변경해줘야할 것.
     protected virtual void Die()
     {
+        float percent = 10 + (PrincessManager.Instance.princessStress / 30);
+        if (Probability.ProbabilityCheck(percent))
+        {
+            PrincessManager.Instance.IncreaseStress(20);
+        }
         unitDraggable.UnitDied();
         isDied = false;
         ObjectPoolManager.Instance.ReturnUnitObject(unitType, gameObject);

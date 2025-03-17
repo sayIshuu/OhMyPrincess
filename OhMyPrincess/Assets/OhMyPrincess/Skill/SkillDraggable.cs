@@ -26,6 +26,10 @@ public class SkillDraggable : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if(PrincessManager.Instance.princessStress < skill.mentalCost)
+        {
+            return;
+        }
         isDragging = true;
         
         foreach (GameObject area in skillSpawnArea)

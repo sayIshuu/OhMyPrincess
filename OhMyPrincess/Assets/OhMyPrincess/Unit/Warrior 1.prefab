@@ -118,13 +118,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitType: 2
-  health: 50
+  health: 100
   attackDamage: 10
   attackSpeed: 2
   moveSpeed: 150
   isCollapsed: 0
   cost: 100
-  energy: 50
+  energy: 20
   isAttacking: 0
   armor: 0
 --- !u!114 &-7859302698450882361

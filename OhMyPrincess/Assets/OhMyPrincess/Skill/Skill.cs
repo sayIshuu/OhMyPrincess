@@ -22,7 +22,14 @@ public abstract class Skill : MonoBehaviour
     {
         if (collision.CompareTag(nameof(TagType.Enemy)))
         {
-            collision.GetComponent<Enemy>().TakeDamage(damage);
+            if(collision.GetComponent<Enemy>().TakeDamageBySkill(damage))
+            {
+                float percent = 20.0f;
+                if (Probability.ProbabilityCheck(percent))
+                {
+                    PrincessManager.Instance.IncreaseStress(20);
+                }
+            }
         }
     }
 
