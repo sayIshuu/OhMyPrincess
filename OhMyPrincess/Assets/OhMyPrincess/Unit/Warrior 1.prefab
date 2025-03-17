@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stress: 0
+  isHealing: 0
 --- !u!50 &6777447341981507445
 Rigidbody2D:
   serializedVersion: 5

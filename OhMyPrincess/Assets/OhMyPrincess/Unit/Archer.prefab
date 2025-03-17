@@ -109,7 +109,10 @@ MonoBehaviour:
   health: 100
   attackDamage: 50
   attackSpeed: 4
+  moveSpeed: 0
+  isCollapsed: 0
   cost: 200
+  isAttacking: 0
 --- !u!114 &-759977299215170387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stress: 0
+  isHealing: 0
 --- !u!50 &4516902697958250742
 Rigidbody2D:
   serializedVersion: 5

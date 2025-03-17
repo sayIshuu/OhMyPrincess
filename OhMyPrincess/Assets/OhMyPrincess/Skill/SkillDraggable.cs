@@ -32,6 +32,8 @@ public class SkillDraggable : MonoBehaviour
         {
             area.SetActive(true);
         }
+
+        PrincessManager.Instance.StartDragSkill();
     }
 
     private void OnMouseDrag()
@@ -51,7 +53,7 @@ public class SkillDraggable : MonoBehaviour
         }
 
         transform.position = originalPosition;
-
+        PrincessManager.Instance.EndDragSkill();
         StartCoroutine(usedSkill());
     }
 
