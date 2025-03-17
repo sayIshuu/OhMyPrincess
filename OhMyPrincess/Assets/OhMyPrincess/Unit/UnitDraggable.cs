@@ -81,9 +81,8 @@ public class UnitDraggable : MonoBehaviour
             //불꽃에 넣어버리기
             if (roadSlot.roadSlotType == RoadSlotType.Heart)
             {
+                unBuied = true;
                 GetComponent<Unit>().Burn();
-
-
                 return;
             }
 

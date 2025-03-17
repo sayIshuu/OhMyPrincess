@@ -23,7 +23,7 @@ public class PrincessManager : MonoBehaviour
     public float princessStress = 0;
     [SerializeField] private SpriteRenderer brigtness;
     private SpriteRenderer spriteRenderer;
-    [SerializeField] private GameObject princessStressGraph;
+    [SerializeField] private Transform princessStressGraph;
 
     private void Start()
     {
@@ -37,9 +37,11 @@ public class PrincessManager : MonoBehaviour
         animator.SetBool("dragSkill", true);
     }
 
-    public void EndDragSkill()
+    public void EndDragSkill(float mentalCost)
     {
         animator.SetBool("dragSkill", false);
+        mentalCost = mentalCost/(100-princessStress) * 100;
+        IncreaseStress(mentalCost);
     }
 
     public void IncreaseStress(float amount)
@@ -63,7 +65,7 @@ public class PrincessManager : MonoBehaviour
         float colorValue = Mathf.Clamp01(1 - (princessStress / 100f)); // 0~1 범위로 변환
         spriteRenderer.color = new Color(colorValue, colorValue, colorValue); // Grayscale 적용
 
-        float graphScaleX = 1000 - princessStress * 10;
-        princessStressGraph.transform.localScale = new Vector3(graphScaleX, 20, 1);
+        float graphScaleX = 1000 - (princessStress * 10);
+        princessStressGraph.localScale = new Vector3(graphScaleX, 20, 1);
     }
 }

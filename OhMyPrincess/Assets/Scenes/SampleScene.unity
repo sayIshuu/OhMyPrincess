@@ -6981,7 +6981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   princessStress: 0
   brigtness: {fileID: 1679809489}
-  princessStressGraph: {fileID: 1005196394}
+  princessStressGraph: {fileID: 1005196396}
 --- !u!4 &1878938622 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9198353751623334201, guid: 2d6fb7be3b3882743b25031fe7042919, type: 3}

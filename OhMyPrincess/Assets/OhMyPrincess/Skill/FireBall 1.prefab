@@ -179,6 +179,7 @@ MonoBehaviour:
   skillType: 1
   damage: 50
   speed: 1500
+  mentalCost: 10
 --- !u!114 &5347599180076591931
 MonoBehaviour:
   m_ObjectHideFlags: 0

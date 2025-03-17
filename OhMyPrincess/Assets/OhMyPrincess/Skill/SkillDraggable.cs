@@ -53,7 +53,7 @@ public class SkillDraggable : MonoBehaviour
         }
 
         transform.position = originalPosition;
-        PrincessManager.Instance.EndDragSkill();
+        PrincessManager.Instance.EndDragSkill(skill.mentalCost);
         StartCoroutine(usedSkill());
     }
 

@@ -6,6 +6,7 @@ public abstract class Skill : MonoBehaviour
     public SkillType skillType;
     public float damage;
     public float speed;
+    public float mentalCost;
 
     protected virtual void Start()
     {
