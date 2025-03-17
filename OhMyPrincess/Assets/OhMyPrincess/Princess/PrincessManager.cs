@@ -23,11 +23,13 @@ public class PrincessManager : MonoBehaviour
     public float princessStress = 0;
     [SerializeField] private SpriteRenderer brigtness;
     private SpriteRenderer spriteRenderer;
+    [SerializeField] private GameObject princessStressGraph;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        princessStressGraph.transform.localScale = new Vector3(1000,20,1);
     }
 
     public void StartDragSkill()
@@ -60,5 +62,8 @@ public class PrincessManager : MonoBehaviour
         brigtness.color = new Color(0, 0, 0, brigtnessAlphaValue); // 투명도 적용
         float colorValue = Mathf.Clamp01(1 - (princessStress / 100f)); // 0~1 범위로 변환
         spriteRenderer.color = new Color(colorValue, colorValue, colorValue); // Grayscale 적용
+
+        float graphScaleX = 1000 - princessStress * 10;
+        princessStressGraph.transform.localScale = new Vector3(graphScaleX, 20, 1);
     }
 }

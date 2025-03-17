@@ -4,7 +4,8 @@ public enum UnitType
 {
     None,
     Archer,
-    Warrior
+    Warrior,
+    Batch
 }
 
 public enum EnemyType

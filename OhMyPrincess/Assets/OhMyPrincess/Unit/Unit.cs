@@ -19,13 +19,14 @@ public abstract class Unit : MonoBehaviour
     public bool isCollapsed;
 
     public int cost;
+    public float energy;
 
     public bool isAttacking;
     private bool isDied;
 
     protected virtual void Start()
     {
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
         isAttacking = false;
         isDied = false;
         isCollapsed = false;
@@ -42,7 +43,7 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if (isCollapsed)
         {
@@ -68,7 +69,7 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    protected virtual void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(nameof(TagType.Unit)) || collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag(nameof(TagType.Betrator)))
         {
@@ -163,7 +164,12 @@ public abstract class Unit : MonoBehaviour
     {
         unitDraggable.UnitDied();
         isDied = false;
-        health = 100;
         ObjectPoolManager.Instance.ReturnUnitObject(unitType, gameObject);
+    }
+
+    public virtual void Burn()
+    {
+        PrincessManager.Instance.DecreaseStress(energy);
+        Die();
     }
 }

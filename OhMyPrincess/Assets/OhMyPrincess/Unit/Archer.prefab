@@ -109,9 +109,10 @@ MonoBehaviour:
   health: 100
   attackDamage: 50
   attackSpeed: 4
-  moveSpeed: 0
+  moveSpeed: 120
   isCollapsed: 0
   cost: 200
+  energy: 50
   isAttacking: 0
 --- !u!114 &-759977299215170387
 MonoBehaviour:

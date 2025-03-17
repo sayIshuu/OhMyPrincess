@@ -20,11 +20,16 @@ public class ObjectPoolManager : MonoBehaviour
     public GameObject fireBallObject;
     private int skillPoolSize = 10;
 
+    [Header("Item Prefabs")]
+    public GameObject batchObject;
+    private int itemPoolSize = 3;
+
     // 큐를 사용하는게 직관적인듯.
     private Queue<GameObject> warriorPool = new Queue<GameObject>();
     private Queue<GameObject> archerPool = new Queue<GameObject>();
     private Queue<GameObject> zombieType01Pool = new Queue<GameObject>();
     private Queue<GameObject> fireBallPool = new Queue<GameObject>();
+    private Queue<GameObject> batchPool = new Queue<GameObject>();
 
     //싱글톤
     private void Awake()
@@ -66,6 +71,13 @@ public class ObjectPoolManager : MonoBehaviour
             fireBall.SetActive(false);
             fireBallPool.Enqueue(fireBall);
         }
+
+        for (int i = 0; i < itemPoolSize; i++)
+        {
+            GameObject batch = Instantiate(batchObject);
+            batch.SetActive(false);
+            batchPool.Enqueue(batch);
+        }
     }
 
     //풀에서 유닛을 가져오는 함수. 부족한 경우는 없음. 격자가 최대 27인데 30개씩 생성하니까.
@@ -97,6 +109,20 @@ public class ObjectPoolManager : MonoBehaviour
             {
                 GameObject archer = Instantiate(archerObject);
                 return archer;
+            }
+        }
+        else if (unitType == UnitType.Batch)
+        {
+            if (batchPool.Count > 0)
+            {
+                GameObject batch = batchPool.Dequeue();
+                batch.SetActive(true);
+                return batch;
+            }
+            else
+            {
+                GameObject batch = Instantiate(batchObject);
+                return batch;
             }
         }
         else
@@ -160,6 +186,10 @@ public class ObjectPoolManager : MonoBehaviour
         else if (unitType == UnitType.Archer)
         {
             archerPool.Enqueue(unit);
+        }
+        else if (unitType == UnitType.Batch)
+        {
+            batchPool.Enqueue(unit);
         }
     }
 

@@ -6,14 +6,16 @@ public class Archer : Unit
     {
         base.Start();
         unitType = UnitType.Archer;
+        animator = GetComponent<Animator>();
         //health = 100;
         //attackDamage = 10;
         //attackSpeed = 1;
         //attackRange = 1;
     }
 
-    public override void TakeDamage(float damage)
+    protected override void Die()
     {
-        base.TakeDamage(damage);
+        base.Die();
+        health = 100;
     }
 }
