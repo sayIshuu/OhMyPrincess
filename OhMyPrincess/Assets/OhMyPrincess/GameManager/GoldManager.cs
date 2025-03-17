@@ -18,12 +18,13 @@ public class GoldManager : MonoBehaviour
         }
     }
 
-    public int gold = 1000;
+    public int gold;
     public TextMeshProUGUI goldText;
 
 
     private void Start()
     {
+        gold = 1000;
         UpdateGoldUI();
     }
 
